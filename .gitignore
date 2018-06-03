@@ -18,3 +18,5 @@ rebar3.crashdump
 
 # GRiSP
 _grisp
+*.LOG
+tests/Mnesia.nonode@nohost/schema.DAT
