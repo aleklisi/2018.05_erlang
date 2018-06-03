@@ -1,7 +1,24 @@
-%change to your path to repo
-cd("C:/Users/sebac/Documents/GitHub/2018.05_erlang/tests").
+% Change to your path to repo
+cd("C:/Users/sebac/Documents/GitHub/2018.05_erlang/bin").
+
+% Compile all modules
 c("../modules/database.erl").
-database_tests:test().
 c("../modules/notifier_gen_server.erl").
-c("../modules/notifier.erl").
 c("../modules/notifier_supervisor.erl").
+c("../modules/rolnik.erl").
+
+% Loading application
+application:loaded_applications().
+application:load(rolnik).
+application:loaded_applications().
+
+% 
+
+% Unloading application
+application:loaded_applications().
+application:unload(rolnik).
+application:loaded_applications().
+
+% Tests
+c("../modules/database_tests.erl").
+database_tests:test().

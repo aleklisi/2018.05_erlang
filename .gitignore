@@ -20,3 +20,4 @@ rebar3.crashdump
 _grisp
 *.LOG
 tests/Mnesia.nonode@nohost/schema.DAT
+*.DAT

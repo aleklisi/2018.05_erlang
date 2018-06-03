@@ -2,7 +2,7 @@
 -author('AleksanderLisiecki').
 
 -behaviour(gen_server).
--export([start_link/0, stop/0, write_to_console_sync/1]).
+-export([start_link/0, stop/0, notify/2]).
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -10,14 +10,16 @@
 %Call Back Functions
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 start_link() ->
     gen_server:start_link({global, ?MODULE}, ?MODULE, [], []).
 
 stop() -> 
     gen_server:cast({global, ?MODULE}, stop).
 
-write_to_console_sync(Info) -> 
-    gen_server:call({global, ?MODULE},{console_sync,Info}).
+notify(console, Info) -> 
+    gen_server:call({global, ?MODULE},{console_sync,Info});
+notify(Dest, _Info) -> {nomatch,Dest}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -30,7 +32,7 @@ init(_Args) ->
     {ok, []}.
 
 handle_call({console_sync,Info}, _From, State) ->
-    io:fwrite("Sync call to print: ~p\n",[Info]),
+    io:fwrite("Print to console: ~p\n",[Info]),
     Reply = {printed,Info},
     {reply, Reply, State};
 handle_call(_Request, _From, State) ->
