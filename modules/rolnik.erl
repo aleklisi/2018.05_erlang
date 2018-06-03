@@ -9,7 +9,7 @@ start() -> application:start(rolnik).
 stop() -> application:stop(rolnik).
 
 start(_Type, _Args) ->
-    notifier_supervisor:start_link().
+    super_supervisor:start_link().
 
 stop(_State) ->
     ok.
