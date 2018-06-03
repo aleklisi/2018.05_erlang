@@ -36,7 +36,8 @@
 init() ->
     mnesia:create_schema([node()]),
     mnesia:start(),
-    Init = mnesia:create_table(measurement, [{attributes, record_info(fields, measurement)}]),
+    Init = mnesia:create_table(measurement, 
+        [{attributes, record_info(fields, measurement)}]),
     timer:sleep(10), %time for db to init
     case Init of
         {atomic,ok} -> ok;

@@ -12,7 +12,11 @@ application:loaded_applications().
 application:load(rolnik).
 application:loaded_applications().
 
-% 
+% Starting application
+application:start(rolnik).
+
+% Stopping application
+application:stop(rolnik).
 
 % Unloading application
 application:loaded_applications().
@@ -20,5 +24,5 @@ application:unload(rolnik).
 application:loaded_applications().
 
 % Tests
-c("../modules/database_tests.erl").
+c("../tests/database_tests.erl").
 database_tests:test().
