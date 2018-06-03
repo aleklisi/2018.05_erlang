@@ -33,7 +33,6 @@
                       temperature = -273.0,
                       humidity = 0.0}). %for future use
 
-
 init() ->
     mnesia:create_schema([node()]),
     mnesia:start(),
@@ -47,22 +46,34 @@ init() ->
 
 terminate() -> mnesia:stop().
 
-insert_measurement(Temperature,Humidity,{{Year, Month, Day}, {Hour, Minute, Second}}) ->
+insert_measurement(Temperature,Humidity,{{Year, Month, Day}, {Hour, Minute, Second}}) 
+    when is_integer(Temperature) and
+    is_integer(Humidity) and
+    is_integer(Year) and
+    is_integer(Month) and
+    is_integer(Day) and
+    is_integer(Hour) and
+    is_integer(Minute) and
+    is_integer(Second) -> insert_measurement_type_checked(Temperature,Humidity,{{Year, Month, Day}, {Hour, Minute, Second}});
+insert_measurement(T,H,D) -> 
+    {badarg,T,H,D}.
+
+
+insert_measurement_type_checked(Temperature,Humidity,{{Year, Month, Day}, {Hour, Minute, Second}}) ->
     UniversalTime = {{Year, Month, Day}, {Hour, Minute, Second}},
     NewRecord = {measurement,UniversalTime,Temperature,Humidity},
     %io:fwrite("Adding: ~p to db\n",[NewRecord]),
     Fun = fun() -> mnesia:write(NewRecord) end,
-    mnesia:transaction(Fun);
-insert_measurement(T,H,D) -> 
-    {badarg,T,H,D}.
+    mnesia:transaction(Fun).
 
 get_measurements() ->
      get_measurements(fun(_) -> true end).
 
-get_measurements(Filter) ->
+get_measurements(Filter) when is_function(Filter)->
      F = fun() ->
 		Result = qlc:q([Measurement || Measurement <- mnesia:table(measurement), Filter(Measurement)]),
 		qlc:e(Result)
 	end,
     {atomic,Results} = mnesia:transaction(F),
-    Results.
+    Results;
+get_measurements(F) -> {badarg,F}.
