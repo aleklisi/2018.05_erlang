@@ -1,19 +1,7 @@
-rolnik
-=====
-
-A GRiSP application
-
-Build
------
-
-    $ rebar3 compile
-
-Build Erlang for the GRiSP board
------
-
-    $ rebar3 grisp build
-
-Deploy
-------
-
-    $ rebar3 grisp deploy --relname rolnik --relvsn 0.1.0
+%change to your path to repo
+cd("C:/Users/sebac/Documents/GitHub/2018.05_erlang/tests").
+c("../modules/database.erl").
+database_tests:test().
+c("../modules/notifier_gen_server.erl").
+c("../modules/notifier.erl").
+c("../modules/notifier_supervisor.erl").

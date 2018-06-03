@@ -1,7 +1,6 @@
 -module(database_tests).
 -author('AleksanderLisiecki').
 
-% cd("C:/Users/sebac/Documents/GitHub/2018.05_erlang/tests").
 -include_lib("eunit/include/eunit.hrl").
 -import(database,[init/0,                
         terminate/0,            
