@@ -46,7 +46,7 @@ insert_many_measurements_after_init_test() ->
     [?assertEqual(insert_measurement(1,2,{{1,2,3},{4,5,6}}),{atomic,ok}) || _ <- lists:seq(1,10)],
     terminate().
 
-insert_type_incorrect_measuremnt(Temp,Hum,DateTime) -> 
+insert_fails_badarg(Temp,Hum,DateTime) -> 
     init(),
     IncorrectInput = insert_measurement(Temp,Hum,DateTime),
     ?assertEqual(IncorrectInput, {badarg,Temp,Hum,DateTime}),
@@ -55,28 +55,38 @@ insert_type_incorrect_measuremnt(Temp,Hum,DateTime) ->
     terminate().
 
 insert_type_incorrect_temp_measuremnt_test() -> 
-    insert_type_incorrect_measuremnt(a,1,{{1,1,1},{1,1,1}}).
+    insert_fails_badarg(a,1,{{1,1,1},{1,1,1}}).
 
 insert_type_incorrect_hum_measuremnt_test() -> 
-    insert_type_incorrect_measuremnt(1,a,{{1,1,1},{1,1,1}}).
+    insert_fails_badarg(1,a,{{1,1,1},{1,1,1}}).
 
 insert_type_incorrect_year_measuremnt_test() -> 
-    insert_type_incorrect_measuremnt(1,1,{{a,1,1},{1,1,1}}).
+    insert_fails_badarg(1,1,{{a,1,1},{1,1,1}}).
 
 insert_type_incorrect_month_measuremnt_test() -> 
-    insert_type_incorrect_measuremnt(1,1,{{1,a,1},{1,1,1}}).
+    insert_fails_badarg(1,1,{{1,a,1},{1,1,1}}).
 
 insert_type_incorrect_day_measuremnt_test() -> 
-    insert_type_incorrect_measuremnt(1,1,{{1,1,a},{1,1,1}}).
+    insert_fails_badarg(1,1,{{1,1,a},{1,1,1}}).
 
 insert_type_incorrect_hour_measuremnt_test() -> 
-    insert_type_incorrect_measuremnt(1,1,{{1,1,1},{a,1,1}}).
+    insert_fails_badarg(1,1,{{1,1,1},{a,1,1}}).
 
 insert_type_incorrect_min_measuremnt_test() -> 
-    insert_type_incorrect_measuremnt(1,1,{{1,1,1},{1,a,1}}).
+    insert_fails_badarg(1,1,{{1,1,1},{1,a,1}}).
 
 insert_type_incorrect_sec_measuremnt_test() -> 
-    insert_type_incorrect_measuremnt(1,1,{{1,1,1},{1,1,a}}).
+    insert_fails_badarg(1,1,{{1,1,1},{1,1,a}}).
+
+insert_measurement_too_low_temp_test() -> 
+    insert_fails_badarg(-275,1,{{1,1,1},{1,1,1}}).
+
+insert_measurement_too_low_hum_test() -> 
+    insert_fails_badarg(1,-1,{{1,1,1},{1,1,1}}).
+
+insert_measurement_too_high_hum_test() -> 
+    insert_fails_badarg(1,101,{{1,1,1},{1,1,1}}).
+
 
 insert_measurement_without_init_test() -> 
     InsertResult = insert_measurement(1,2,{{1,2,3},{4,5,6}}),

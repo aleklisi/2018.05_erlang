@@ -54,7 +54,10 @@ insert_measurement(Temperature,Humidity,{{Year, Month, Day}, {Hour, Minute, Seco
     is_integer(Day) and
     is_integer(Hour) and
     is_integer(Minute) and
-    is_integer(Second) -> insert_measurement_type_checked(Temperature,Humidity,{{Year, Month, Day}, {Hour, Minute, Second}});
+    is_integer(Second) and
+    (Humidity >= 0) and
+    (Humidity =< 100) and
+    (Temperature > -275) -> insert_measurement_type_checked(Temperature,Humidity,{{Year, Month, Day}, {Hour, Minute, Second}});
 insert_measurement(T,H,D) -> 
     {badarg,T,H,D}.
 
