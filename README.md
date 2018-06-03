@@ -5,10 +5,11 @@ cd("C:/Users/sebac/Documents/GitHub/2018.05_erlang/bin").
 c("../modules/database.erl").
 c("../modules/notifier_gen_server.erl").
 c("../modules/notifier_supervisor.erl").
-c("../modules/rolnik.erl").
 c("../modules/web_server.erl").
 c("../modules/web_supervisor.erl").
 c("../modules/super_supervisor.erl").
+c("../modules/rolnik.erl").
+c("../modules/parser.erl").
 
 % Loading application
 application:loaded_applications().
@@ -33,4 +34,3 @@ database_tests:test().
 % Webpages:
 % http://127.0.0.1:8080/erl/web_server:temperature
 % http://127.0.0.1:8080/erl/web_server:humidity
- 

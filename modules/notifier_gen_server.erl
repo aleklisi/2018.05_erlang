@@ -19,6 +19,8 @@ stop() ->
 
 notify(console, Info) -> 
     gen_server:call({global, ?MODULE},{console_sync,Info});
+notify(grisp_connection_timeout, Timeout) -> 
+    gen_server:call({global, ?MODULE},{grisp_connection_timeout,Timeout});    
 notify(Dest, _Info) -> {nomatch,Dest}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -33,6 +35,10 @@ init(_Args) ->
 
 handle_call({console_sync,Info}, _From, State) ->
     io:fwrite("Print to console: ~p\n",[Info]),
+    Reply = {printed,Info},
+    {reply, Reply, State};
+handle_call({grisp_connection_timeout,Timeout}, _From, State) ->
+    io:fwrite("grisp_connection_timeout: ~p\n",[Timeout]),
     Reply = {printed,Info},
     {reply, Reply, State};
 handle_call(_Request, _From, State) ->
