@@ -39,7 +39,7 @@ handle_call({console_sync,Info}, _From, State) ->
     {reply, Reply, State};
 handle_call({grisp_connection_timeout,Timeout}, _From, State) ->
     io:fwrite("grisp_connection_timeout: ~p\n",[Timeout]),
-    Reply = {printed,Info},
+    Reply = {printed,Timeout},
     {reply, Reply, State};
 handle_call(_Request, _From, State) ->
     {reply, nomatch, State}.
