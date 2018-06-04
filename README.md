@@ -51,5 +51,7 @@ c("../tests/database_tests.erl").
 database_tests:test().
 
 % Webpages:
-%1
+
 % http://127.0.0.1:8080/erl/web_server:humidity
+
+% http://127.0.0.1:8080/erl/web_server:temperature
