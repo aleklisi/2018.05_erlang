@@ -1,4 +1,4 @@
--module(web_supervisor).
+-module(clock_supervisor).
 -author('AleksanderLisiecki').
 
 -behaviour(supervisor).
@@ -17,7 +17,7 @@ init([]) ->
     Restart = permanent,
     Shutdown = brutal_kill,
     Type = worker,
-    ChildSpecWeb = {web_serverID, 
-        {web_server, start_link, []},
-        Restart, Shutdown, Type, [web_server]},
-    {ok,{Flags,[ChildSpecWeb]}}.
+    ChildSpecClock = {clockID, 
+        {clock, start_link, []},
+        Restart, Shutdown, Type, [clock]},
+    {ok,{Flags,[ChildSpecClock]}}.

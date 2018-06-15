@@ -17,6 +17,8 @@ start_link() ->
 stop() -> 
     gen_server:cast({global, ?MODULE}, stop).
 
+notify(all,Info) -> 
+    notify(console,Info);
 notify(console, Info) -> 
     gen_server:call({global, ?MODULE},{console_sync,Info});
 notify(grisp_connection_timeout, Timeout) -> 

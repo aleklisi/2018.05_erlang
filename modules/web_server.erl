@@ -2,7 +2,7 @@
 -author('AleksanderLisiecki').
 
 -export([start_link/0, stop/0]).
--export([temperature/3, humidity/3, add_measurement/3]).
+-export([temperature/3, humidity/3, send_measurement/3]).
 
 stop() -> inets:stop().
 
@@ -51,10 +51,10 @@ humidity(SessionID, _Env, _Input) ->
       mod_esi:deliver(SessionID, [ 
       "Content-Type: text/html\r\n\r\n", binary_to_list(BeforeTable) ++ binary_to_list(Plot) ++ binary_to_list(AfterTable) ]).
 
-add_measurement(SessionID, _Env, Input) ->
+send_measurement(SessionID, _Env, Input) ->
       io:fwrite("~p",[Input]),
-      
-      mod_esi:deliver(SessionID, [ 
-      "Content-Type: text/html\r\n\r\n", SessionID ]).
+      Top = "<html><header><title>Measurement Received Thanks :)</title></header><body>",
+      Bottom = "</body></html>",
+      mod_esi:deliver(SessionID, [ "Content-Type: text/html\r\n\r\n", Top ++ Input ++ Bottom ]).
 
       

@@ -23,4 +23,7 @@ init([]) ->
     ChildSpecNotifier = {notifier_supervisorID, 
         {notifier_supervisor, start_link, []},
         Restart, Shutdown, Type, [notifier_supervisor]},
-    {ok,{Flags,[ChildSpecWeb, ChildSpecNotifier]}}.
+    ChildSpecClock = {clock_supervisorID, 
+        {clock_supervisor, start_link, []},
+        Restart, Shutdown, Type, [notifier_supervisor]},
+    {ok,{Flags,[ChildSpecWeb, ChildSpecNotifier, ChildSpecClock]}}.

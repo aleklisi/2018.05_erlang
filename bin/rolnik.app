@@ -5,7 +5,7 @@
         {vsn, "1"},
         {module, [notifier_gen_server, notifier_supervisor,
         super_supervisor, web_server, web_supervisor]},
-        {registered, []},
+        {registered, [clockPID]},
         {application, [kernel, stdlid]},
         {mod, {rolnik,[]}},
         {env, []}
