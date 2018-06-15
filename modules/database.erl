@@ -2,11 +2,7 @@
 -author('AleksanderLisiecki').
 -include_lib("stdlib/include/qlc.hrl").
 
--export([init/0,                
-        terminate/0,            
-        insert_measurement/3,
-        get_measurements/0,
-        get_measurements/1]).
+-export([init/0, terminate/0, insert_measurement/3, get_measurements/0, get_measurements/1]).
 
 -record(measurement, {datetime = {{0,0,0},{0,0,0}} :: {{integer(),integer(),integer()},{integer(),integer(),integer()}}, %erlang:universaltime() returns {{Year, Month, Day}, {Hour, Minute, Second}}
                       temperature = -273 :: integer(),
@@ -25,6 +21,7 @@ init() ->
     case Init of
         {atomic,ok} -> ok;
         {aborted,{already_exists,measurement}} -> ok;
+        {aborted,{node_not_running,nonode@nohost}} -> node_not_running;
         Error -> Error
     end. 
 

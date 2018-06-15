@@ -8,18 +8,25 @@ update_webpage() ->
     update_humidity().
 
 update_temperature() -> 
-    {{CurrentYear,CurrentMonth,CurrentDay},{_,_,_}} = erlang:universaltime(),
-    Measurements = database:get_measurements(
-        fun({measurement,{{Year,Month,Day},{_,_,_}},_,_}) -> 
-            ((Year == CurrentYear) and
-            (Month == CurrentMonth) and
-            (Day == CurrentDay)) 
-        end),
-        Plot = lists:foldr(fun(Acc,M) -> Acc ++ format_measurement_temperature(M) end, "", Measurements),
-        file:write_file("../data/temperature.csv",Plot).
+    io:fwrite("DEBUG: WWWUPDATER Before Measurements \n",[]),    
+    Measurements = get_measurements(),
+    io:fwrite("DEBUG: WWWUPDATER Measurements are: ~p\n",[Measurements]),    
+    Plot = lists:foldr(fun(M,Acc) -> Acc ++ format_measurement_temperature(M) end, "", Measurements),
+    file:write_file("../data/temperature.csv",Plot).
 
 update_humidity() -> ok.
 
-format_measurement_temperature({measurement,{{Year, Month, Day}, {Hour, Minute, Second}},Temperature,Humidity}) ->
+%get_measurements() -> 
+%    [{measurement,{{2018,6,15},{3,3,3}},5,6},
+%    {measurement,{{2018,6,15},{3,1,3}},4,7},
+%    {measurement,{{2018,6,15},{1,3,3}},3,8}].
+
+get_measurements() ->
+    {{CurrentYear,CurrentMonth,CurrentDay},{_,_,_}} = erlang:universaltime(),
+    database:get_measurements().
+    %database:get_measurements(fun({measurement,{{Year,Month,_},{_,_,_}},_,_}) -> ((Year == CurrentYear) and (CurrentMonth == 1)) end).
+
+format_measurement_temperature([]) -> "";
+format_measurement_temperature({measurement,{{_Year, _Month, _Day}, {Hour, Minute, Second}}, Temperature, _Humidity}) ->
     X = 3600 * Hour + 60 * Minute + Second,
     lists:flatten(io_lib:format("{ x: ~p, y: ~p },\n",[X, Temperature])). 
