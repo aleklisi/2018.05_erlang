@@ -6,6 +6,10 @@ cd("C:/Users/alekl/Documents/ErlangProtorypes/2018.05_erlang/bin").
 
 c("../modules/database.erl").
 
+c("../modules/logics.erl").
+
+c("../modules/www_updater.erl").
+
 c("../modules/notifier_gen_server.erl").
 
 c("../modules/notifier_supervisor.erl").
@@ -13,6 +17,8 @@ c("../modules/notifier_supervisor.erl").
 c("../modules/clock.erl").
 
 c("../modules/clock_supervisor.erl").
+
+c("../modules/router_gen_server").
 
 c("../modules/web_server.erl").
 
@@ -59,3 +65,7 @@ database_tests:test().
 % http://127.0.0.1:8080/erl/web_server:humidity
 
 % http://127.0.0.1:8080/erl/web_server:temperature
+
+%sending data
+
+%  httpc:request(get, {"http://127.0.0.1:8080/erl/web_server:send_measurement?give_data_there", []}, [], []).

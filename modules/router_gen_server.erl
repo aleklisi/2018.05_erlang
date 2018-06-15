@@ -1,8 +1,8 @@
--module(notifier_gen_server).
+-module(router_gen_server).
 -author('AleksanderLisiecki').
 
 -behaviour(gen_server).
--export([start_link/0, stop/0, notify/2]).
+-export([start_link/0, stop/0, propagate_message/1]).
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -17,13 +17,8 @@ start_link() ->
 stop() -> 
     gen_server:cast({global, ?MODULE}, stop).
 
-notify(all,Info) -> 
-    notify(console,Info);
-notify(console, Info) -> 
-    gen_server:call({global, ?MODULE},{console_sync,Info});
-notify(grisp_connection_timeout, Timeout) -> 
-    gen_server:call({global, ?MODULE},{grisp_connection_timeout,Timeout});    
-notify(Dest, _Info) -> {nomatch,Dest}.
+propagate_message(Message) -> 
+    gen_server:cast({global, ?MODULE},{propagate, Message}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -35,12 +30,16 @@ init(_Args) ->
     process_flag(trap_exit, true),
     {ok, []}.
 
-handle_call({console_sync,Info}, _From, State) ->
-    io:fwrite("Print to console: ~p\n",[Info]),
-    Reply = {printed,Info},
-    {reply, Reply, State};
 handle_call(_Request, _From, State) ->
     {reply, nomatch, State}.
+
+handle_cast({propagate, Message}, State) ->
+    clock:send_data_received(),
+    {{temperature,Temperature},{humidity,Humidity}} = parser:parse_message(Message),
+    DateTime = erlang:universaltime(),
+    database:insert_measurement(Temperature,Humidity,DateTime),
+    logics:decide_if_notify(),
+    {noreply, State};
 
 handle_cast(_Request, State) ->
     {noreply, State}.

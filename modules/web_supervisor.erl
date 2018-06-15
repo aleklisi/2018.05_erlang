@@ -20,4 +20,7 @@ init([]) ->
     ChildSpecWeb = {web_serverID, 
         {web_server, start_link, []},
         Restart, Shutdown, Type, [web_server]},
-    {ok,{Flags,[ChildSpecWeb]}}.
+    ChildSpecRouter = {routerID, 
+        {router_gen_server, start_link, []},
+        Restart, Shutdown, Type, [router_gen_server]},
+    {ok,{Flags,[ChildSpecWeb,ChildSpecRouter]}}.

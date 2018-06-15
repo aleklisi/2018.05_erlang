@@ -14,14 +14,14 @@ send_data_received() -> clockPID ! data_received.
 loop() ->
     receive
         data_received -> 
-            io:fwrite("CLK data_received\n",[]),
+            io:fwrite("DEBUG: CLK data_received\n",[]),
             loop();
         terminate -> 
-            io:fwrite("CLK terminate\n",[]),
+            io:fwrite("DEBUG: CLK terminate\n",[]),
             exit(self(),kill)
     after
         ?TIMEOUT -> 
-            io:fwrite("CLK TimeoutMiliseconds\n",[]),            
-            notifier_gen_server:notify(all, io_lib:format("GRiSP response timeout (~p miliseconds) exceeded!!",[?TIMEOUT])),
+            io:fwrite("DEBUG: CLK TimeoutMiliseconds\n",[]),
+            notifier_gen_server:notify(all, lists:flatten(io_lib:format("GRiSP response timeout ~p miliseconds exceeded",[?TIMEOUT]))),
             loop()
     end.

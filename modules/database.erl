@@ -57,7 +57,7 @@ insert_measurement(T,H,D) ->
 insert_measurement_type_checked(Temperature,Humidity,{{Year, Month, Day}, {Hour, Minute, Second}}) ->
     UniversalTime = {{Year, Month, Day}, {Hour, Minute, Second}},
     NewRecord = {measurement,UniversalTime,Temperature,Humidity},
-    %io:fwrite("Adding: ~p to db\n",[NewRecord]),
+    io:fwrite("DEBUG: DB adding: ~p to db\n",[NewRecord]),
     Fun = fun() -> mnesia:write(NewRecord) end,
     mnesia:transaction(Fun).
 
