@@ -12,6 +12,7 @@ start_link() ->
 send_data_received() -> clockPID ! data_received.
 
 loop() ->
+    www_updater:update_webpage(),
     receive
         data_received -> 
             io:fwrite("DEBUG: CLK data_received\n",[]),

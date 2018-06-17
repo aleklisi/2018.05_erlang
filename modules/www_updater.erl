@@ -16,17 +16,16 @@ update_temperature() ->
 
 update_humidity() -> ok.
 
-%get_measurements() -> 
-%    [{measurement,{{2018,6,15},{3,3,3}},5,6},
-%    {measurement,{{2018,6,15},{3,1,3}},4,7},
-%    {measurement,{{2018,6,15},{1,3,3}},3,8}].
-
 get_measurements() ->
-    {{CurrentYear,CurrentMonth,CurrentDay},{_,_,_}} = erlang:universaltime(),
-    database:get_measurements().
-    %database:get_measurements(fun({measurement,{{Year,Month,_},{_,_,_}},_,_}) -> ((Year == CurrentYear) and (CurrentMonth == 1)) end).
+    Measurements = database:get_measurements(),
+    lists:sort(
+        fun({_,{{AY,AMo,AD},{AH,AMi,AS}},_,_},{_,{{BY,BMo,BD},{BH,BMi,BS}},_,_}) -> 
+            TimeA = ((((AY * 12 + AMo) * 30 + AD) *24 + AH) *60 + AMi) * 60 + AS,
+            TimeB = ((((BY * 12 + BMo) * 30 + BD) *24 + BH) *60 + BMi) * 60 + BS,
+            TimeA > TimeB 
+        end, Measurements).
 
 format_measurement_temperature([]) -> "";
-format_measurement_temperature({measurement,{{_Year, _Month, _Day}, {Hour, Minute, Second}}, Temperature, _Humidity}) ->
-    X = 3600 * Hour + 60 * Minute + Second,
+format_measurement_temperature({measurement,{{_Year, _Month, _Day}, {_Hour, Minute, Second}}, Temperature, _Humidity}) ->
+    X = 60 * Minute + Second,
     lists:flatten(io_lib:format("{ x: ~p, y: ~p },\n",[X, Temperature])). 

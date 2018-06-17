@@ -8,10 +8,6 @@
                       temperature = -273 :: integer(),
                       humidity = 0 :: integer()}). %for future use
  
-% init -> ok | Error
-% creates DB schema, starts mnesia, creates table measurement 
-% returns ok no matter if table does not exist it is created
-% returns Error if something goes wrong
 init() ->
     mnesia:create_schema([node()]),
     mnesia:start(),
@@ -25,8 +21,6 @@ init() ->
         Error -> Error
     end. 
 
-% stops mnesia - when called prints INFO RAPORT and
-% returns stopped
 terminate() -> mnesia:stop().
 
 % inserts measurement record into db with current time and date (see erlang:universaltime()) 
@@ -53,7 +47,7 @@ insert_measurement(T,H,D) ->
 
 insert_measurement_type_checked(Temperature,Humidity,{{Year, Month, Day}, {Hour, Minute, Second}}) ->
     UniversalTime = {{Year, Month, Day}, {Hour, Minute, Second}},
-    NewRecord = {measurement,UniversalTime,Temperature,Humidity},
+    NewRecord = #measurement{datetime=UniversalTime, temperature=Temperature, humidity=Humidity},
     io:fwrite("DEBUG: DB adding: ~p to db\n",[NewRecord]),
     Fun = fun() -> mnesia:write(NewRecord) end,
     mnesia:transaction(Fun).
