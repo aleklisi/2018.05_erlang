@@ -18,13 +18,17 @@ stop() ->
     gen_server:cast({global, ?MODULE}, stop).
 
 notify(all,Info) -> 
-    notify(console,Info);
+    notify(console, Info),
+    notify(email, Info);
 
 notify(console, Info) -> 
-    gen_server:call({global, ?MODULE},{console_sync,Info});
+    gen_server:cast({global, ?MODULE},{console_sync, Info});
 
-notify(grisp_connection_timeout, Timeout) -> 
-    gen_server:call({global, ?MODULE},{grisp_connection_timeout,Timeout});    
+notify(email, Info) -> 
+    gen_server:cast({global, ?MODULE},{email, Info});
+
+notify(grisp_connection_timeout, Info) -> 
+    notify(console,Info);   
 
 notify(Dest, _Info) -> {nomatch,Dest}.
 
@@ -38,14 +42,16 @@ init(_Args) ->
     process_flag(trap_exit, true),
     {ok, []}.
 
-%TODO add sending email call
-handle_call({console_sync,Info}, _From, State) ->
-    io:fwrite("Print to console: ~p\n",[Info]),
-    Reply = {printed,Info},
-    {reply, Reply, State};
-
 handle_call(_Request, _From, State) ->
     {reply, nomatch, State}.
+
+handle_cast({console_sync,Info}, State) ->
+    io:fwrite("Notify to console: ~p\n",[Info]),
+    {noreply, State};
+
+handle_cast({email,Info}, State) ->
+    send_email(Info),
+    {noreply, State};
 
 handle_cast(_Request, State) ->
     {noreply, State}.
@@ -57,3 +63,19 @@ terminate(_Reason, _State) -> ok.
 
 code_change(_OldVersion,State,_Extra) -> 
     {ok, State}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+send_email(Text) -> 
+   gen_smtp_client:send(
+    {
+        "kotosusel@gmail.com",
+        ["alek.lisiecki@gmail.com"],
+        Text
+    },
+   [
+        {relay, "smtp.gmail.com"},
+        {port, 587 }, 
+        {username, "kotosusel@gmail.com"}, 
+        {password, "Developer123"}
+    ]).

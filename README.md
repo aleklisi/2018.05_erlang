@@ -4,30 +4,28 @@ cd("C:/Users/alekl/Documents/ErlangProtorypes/2018.05_erlang/bin").
 
 % Compile all modules
 
+c("../gen_smtp-master/src/binstr.erl").
+c("../gen_smtp-master/src/gen_smtp_application.erl").
+c("../gen_smtp-master/src/gen_smtp_client.erl").
+c("../gen_smtp-master/src/gen_smtp_server.erl").
+c("../gen_smtp-master/src/gen_smtp_server_session.erl").
+c("../gen_smtp-master/src/mimemail.erl").
+c("../gen_smtp-master/src/smtp_server_example.erl").
+c("../gen_smtp-master/src/smtp_util.erl").
+c("../gen_smtp-master/src/socket.erl").
+
 c("../modules/database.erl").
-
 c("../modules/logics.erl").
-
 c("../modules/www_updater.erl").
-
 c("../modules/notifier_gen_server.erl").
-
 c("../modules/notifier_supervisor.erl").
-
 c("../modules/clock.erl").
-
 c("../modules/clock_supervisor.erl").
-
 c("../modules/router_gen_server").
-
 c("../modules/web_server.erl").
-
 c("../modules/web_supervisor.erl").
-
 c("../modules/super_supervisor.erl").
-
 c("../modules/rolnik.erl").
-
 c("../modules/parser.erl").
 
 % Loading application

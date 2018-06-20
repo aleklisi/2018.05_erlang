@@ -23,6 +23,6 @@ loop() ->
     after
         ?TIMEOUT -> 
             %io:fwrite("DEBUG: CLK TimeoutMiliseconds\n",[]),
-            notifier_gen_server:notify(all, lists:flatten(io_lib:format("GRiSP response timeout ~p miliseconds exceeded",[?TIMEOUT]))),
+            notifier_gen_server:notify(grisp_connection_timeout, lists:flatten(io_lib:format("GRiSP response timeout ~p miliseconds exceeded",[?TIMEOUT]))),
             loop()
     end.

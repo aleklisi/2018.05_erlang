@@ -5,13 +5,29 @@
         {vsn, "1"},
         {module, [
             super_supervisor,
-            notifier_gen_server, router_gen_server, notifier_supervisor,
+            notifier_gen_server,
+            router_gen_server, 
+            notifier_supervisor,
             web_server, web_supervisor,
-            clock, clock_supervisor,
-            database, logics, rolnik, www_updater, parser
+            clock,
+            clock_supervisor,
+            database,
+            logics,
+            rolnik, 
+            www_updater, 
+            parser
         ]},
         {registered, [clockPID]},
-        {application, [kernel, stdlid]},
+        {application, [
+            kernel,
+            stdlid, 
+            mnesia, 
+            inets, 
+            crypto,
+            asn1,
+            public_key,
+            ssl
+        ]},
         {mod, {rolnik,[]}},
         {env, []}
     ]
