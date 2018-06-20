@@ -36,6 +36,6 @@ format_measurement_temperature({measurement,{{_Year, _Month, _Day}, {_Hour, Minu
 
 
 format_measurement_humidity([]) -> "";
-format_measurement_humidity({measurement,{{_Year, _Month, _Day}, {_Hour, Minute, Second}}, Temperature, _Humidity}) ->
+format_measurement_humidity({measurement,{{_Year, _Month, _Day}, {_Hour, Minute, Second}}, _Temperature, Humidity}) ->
     X = 60 * Minute + Second,
-    lists:flatten(io_lib:format("{ x: ~p, y: ~p },\n",[X, Temperature])). 
+    lists:flatten(io_lib:format("{ x: ~p, y: ~p },\n",[X, Humidity])). 
