@@ -8,13 +8,14 @@ update_webpage() ->
     update_humidity().
 
 update_temperature() -> 
-    %io:fwrite("DEBUG: WWWUPDATER Before Measurements \n",[]),    
+    %io:fwrite("DEBUG: WWWUPDATER Before Measur0ements \n",[]),    
     Measurements = get_measurements(),
     %io:fwrite("DEBUG: WWWUPDATER Measurements are: ~p\n",[Measurements]),    
     Plot = lists:foldr(fun(M,Acc) -> Acc ++ format_measurement_temperature(M) end, "", Measurements),
     file:write_file("../data/temperature.csv",Plot).
 
-update_humidity() ->  %io:fwrite("DEBUG: WWWUPDATER Before Measurements \n",[]),    
+update_humidity() ->  
+    %io:fwrite("DEBUG: WWWUPDATER Before Measurements \n",[]),    
     Measurements = get_measurements(),
     %io:fwrite("DEBUG: WWWUPDATER Measurements are: ~p\n",[Measurements]),    
     Plot = lists:foldr(fun(M,Acc) -> Acc ++ format_measurement_humidity(M) end, "", Measurements),
@@ -31,11 +32,11 @@ get_measurements() ->
 
 format_measurement_temperature([]) -> "";
 format_measurement_temperature({measurement,{{_Year, _Month, _Day}, {_Hour, Minute, Second}}, Temperature, _Humidity}) ->
-    X = 60 * Minute + Second,
+    X = 3600 * Hour + 60 * Minute + Second,
     lists:flatten(io_lib:format("{ x: ~p, y: ~p },\n",[X, Temperature])). 
 
 
 format_measurement_humidity([]) -> "";
 format_measurement_humidity({measurement,{{_Year, _Month, _Day}, {_Hour, Minute, Second}}, _Temperature, Humidity}) ->
-    X = 60 * Minute + Second,
+    X = 3600 * Hour + 60 * Minute + Second,
     lists:flatten(io_lib:format("{ x: ~p, y: ~p },\n",[X, Humidity])). 
