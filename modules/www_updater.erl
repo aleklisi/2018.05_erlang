@@ -4,22 +4,18 @@
 -export([update_webpage/0]).
 
 update_webpage() -> 
-    update_temperature(),
-    update_humidity().
+    update(temperature),
+    update(humidity).
 
-update_temperature() -> 
+update(TempOrHum) -> 
     %io:fwrite("DEBUG: WWWUPDATER Before Measur0ements \n",[]),    
     Measurements = get_measurements(),
     %io:fwrite("DEBUG: WWWUPDATER Measurements are: ~p\n",[Measurements]),    
-    Plot = lists:foldr(fun(M,Acc) -> Acc ++ format_measurement_temperature(M) end, "", Measurements),
-    file:write_file("../data/temperature.csv",Plot).
-
-update_humidity() ->  
-    %io:fwrite("DEBUG: WWWUPDATER Before Measurements \n",[]),    
-    Measurements = get_measurements(),
-    %io:fwrite("DEBUG: WWWUPDATER Measurements are: ~p\n",[Measurements]),    
-    Plot = lists:foldr(fun(M,Acc) -> Acc ++ format_measurement_humidity(M) end, "", Measurements),
-    file:write_file("../data/humidity.csv",Plot).
+    Plot = lists:foldr(fun(M,Acc) -> Acc ++ format_measurement(M, TempOrHum) end, "", Measurements),
+    case TempOrHum of
+        temperature -> file:write_file("../data/temperature.csv",Plot);
+        humidity ->     file:write_file("../data/humidity.csv",Plot)
+    end.
 
 get_measurements() ->
     Measurements = database:get_measurements(),
@@ -30,13 +26,9 @@ get_measurements() ->
             TimeA > TimeB 
         end, Measurements).
 
-format_measurement_temperature([]) -> "";
-format_measurement_temperature({measurement,{{_Year, _Month, _Day}, {_Hour, Minute, Second}}, Temperature, _Humidity}) ->
-    X = 3600 * Hour + 60 * Minute + Second,
-    lists:flatten(io_lib:format("{ x: ~p, y: ~p },\n",[X, Temperature])). 
-
-
-format_measurement_humidity([]) -> "";
-format_measurement_humidity({measurement,{{_Year, _Month, _Day}, {_Hour, Minute, Second}}, _Temperature, Humidity}) ->
-    X = 3600 * Hour + 60 * Minute + Second,
-    lists:flatten(io_lib:format("{ x: ~p, y: ~p },\n",[X, Humidity])). 
+format_measurement({measurement,{{Year, Month, Day}, {Hour, Minute, Second}}, Temperature, Humidity},TempOrHum) ->
+    X = (((((Year * 12) + Month) * 30 + Day) * 24 + Hour) * 60 + Minute) * 60 + Second,
+    case TempOrHum of
+        temperature -> lists:flatten(io_lib:format("{ x: ~p, y: ~p },\n",[X, Temperature]));
+        humidity -> lists:flatten(io_lib:format("{ x: ~p, y: ~p },\n",[X, Humidity]))
+    end.
