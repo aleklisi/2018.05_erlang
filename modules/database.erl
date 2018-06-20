@@ -6,7 +6,7 @@
 
 -record(measurement, {datetime = {{0,0,0},{0,0,0}} :: {{integer(),integer(),integer()},{integer(),integer(),integer()}}, %erlang:universaltime() returns {{Year, Month, Day}, {Hour, Minute, Second}}
                       temperature = -273 :: integer(),
-                      humidity = 0 :: integer()}). %for future use
+                      humidity = 0 :: integer()}).
  
 init() ->
     mnesia:create_schema([node()]),

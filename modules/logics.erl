@@ -15,10 +15,9 @@ decide_if_notify() ->
     end.
 
 notification_condition() ->
-    %TODO add more complex logics, get data from DB
     Temperature = get_latest_temperature(), 
-    case Temperature < 5  of
-        true -> {notify,"Temperature is too low\n"};
+    case float(Temperature) < float(5)  of
+        true -> {notify,lists:flatten(io_lib:format("Temperature ~p is too low\n",[Temperature]))};
         _ -> dont_notify
     end.
 
