@@ -7,10 +7,10 @@ decide_if_notify() ->
     NotificationConditionResult = notification_condition(),
     case NotificationConditionResult of
         {notify, Info} -> 
-            io:fwrite("DEBUG: LOGICS notify ~p\n",[Info]),
+            %io:fwrite("DEBUG: LOGICS notify ~p\n",[Info]),
             notifier_gen_server:notify(all, Info);
         _ ->
-            io:fwrite("DEBUG: LOGICS dont notify\n",[]),
+            %io:fwrite("DEBUG: LOGICS dont notify\n",[]),
             dont_notify
     end.
 

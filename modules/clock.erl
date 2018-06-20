@@ -15,14 +15,14 @@ loop() ->
     www_updater:update_webpage(),
     receive
         data_received -> 
-            io:fwrite("DEBUG: CLK data_received\n",[]),
+            %io:fwrite("DEBUG: CLK data_received\n",[]),
             loop();
         terminate -> 
-            io:fwrite("DEBUG: CLK terminate\n",[]),
+            %io:fwrite("DEBUG: CLK terminate\n",[]),
             exit(self(),kill)
     after
         ?TIMEOUT -> 
-            io:fwrite("DEBUG: CLK TimeoutMiliseconds\n",[]),
+            %io:fwrite("DEBUG: CLK TimeoutMiliseconds\n",[]),
             notifier_gen_server:notify(all, lists:flatten(io_lib:format("GRiSP response timeout ~p miliseconds exceeded",[?TIMEOUT]))),
             loop()
     end.

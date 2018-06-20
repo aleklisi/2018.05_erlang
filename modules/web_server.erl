@@ -52,7 +52,7 @@ humidity(SessionID, _Env, _Input) ->
       "Content-Type: text/html\r\n\r\n", binary_to_list(BeforeTable) ++ binary_to_list(Plot) ++ binary_to_list(AfterTable) ]).
 
 send_measurement(SessionID, _Env, Input) ->
-      io:fwrite("HTTP server received ~p\n",[Input]),
+      %io:fwrite("HTTP server received ~p\n",[Input]),
       router_gen_server:propagate_message(Input),
       Top = "<html><header><title>Measurement Received Thanks :)</title></header><body>",
       Bottom = "</body></html>",
