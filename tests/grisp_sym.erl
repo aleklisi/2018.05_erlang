@@ -14,7 +14,7 @@ send_request(N) when N > 0 ->
     Hum = rand:uniform(100),
     Request = lists:flatten(
         io_lib:format(
-            "http://192.168.0.101:8080/erl/web_server:send_measurement?{{temperature,~p},{humidity,~p}}",
+            "http://127.0.0.1:8080/erl/web_server:send_measurement?{{temperature,~p},{humidity,~p}}",
             [Temp,Hum])),
     %io:fwrite("~p\n",[Request]),
     %timer:sleep(1001),
@@ -23,7 +23,7 @@ send_request(N) when N > 0 ->
 send_request(0) -> 
     Request = lists:flatten(
     io_lib:format(
-        "http://192.168.0.101:8080/erl/web_server:send_measurement?{{temperature,~p},{humidity,~p}}",
+        "http://127.0.0.1:8080/erl/web_server:send_measurement?{{temperature,~p},{humidity,~p}}",
         [-1,5])),
         
 httpc:request(get, {Request, []}, [], []),

@@ -77,5 +77,5 @@ send_email(Text) ->
         {relay, "smtp.gmail.com"},
         {port, 587 }, 
         {username, "kotosusel@gmail.com"}, 
-        {password, "Developer123"}
+        {password, "MojeSuperTajneHasło123"}
     ]).

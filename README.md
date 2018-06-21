@@ -1,6 +1,6 @@
 % Change to your path to repo
 
-cd("C:/Users/alekl/Documents/ErlangProtorypes/2018.05_erlang/bin").
+cd("C:/Users/sebac/Documents/GitHub/2018.05_erlang/bin").
 
 % Compile all modules
 
