@@ -1,7 +1,7 @@
 %--- Erlang Inet Configuration -------------------------------------------------
 
 % Add hosts
-{host, {10.152.0.11}, ["hostname"]}.
+{host, {10,152,0,25}, ["hostname"]}.
 
 % Do not monitor the hosts file
 {hosts_file, ""}.

@@ -3,12 +3,13 @@
 
 -export([start_link/1]).
 
--export([
-    handle_call/3,
-    handle_cast/2,
-    handle_info/2,
-    init/1,
-	terminate/2]).
+-export([handle_call/3,
+         handle_cast/2,
+         handle_info/2,
+         init/1,
+         terminate/2]).
+
+-export([request_to_influx/1]).
 
 
 -import(rolnik_device, [device_id_onewire/0,
@@ -42,7 +43,12 @@ handle_info(next, State) ->
         id := ID
     } = State,
     Measurements = read_temperature_onewire(ID),
+    %% write to a local log file
     rolnik_db:update(<<"temperature">>, [{"temp", Measurements}]),
+
+    %% write to an external InfluxDB
+    request_to_influx(Measurements),
+
     erlang:send_after(Time, self(), next),
 
     {noreply, State}.
@@ -55,3 +61,19 @@ handle_cast(_Args, State) ->
 
 terminate(_Reason, _State) ->
     ok.
+
+request_to_influx(Measurements) ->
+    Body = iolist_to_binary(
+             io_lib:format("temperatura,miejsce=szklarnia wartosc=~p",
+                           [Measurements])),
+
+    Request = ["POST"," ","/write?db=rolnik"," ","HTTP/1.0","\r\n",
+               "content-type: text/plain\r\ncontent-length: ",
+               integer_to_list(size(Body)),
+               "\r\nconnection: close\r\n",
+               "\r\n",Body],
+
+    {ok, Sock} = gen_tcp:connect({10,152,0,29}, 8086, []),
+    ok = gen_tcp:send(Sock, Request),
+    ok = gen_tcp:close(Sock).
+    

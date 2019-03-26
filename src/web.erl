@@ -18,7 +18,7 @@ start() ->
       
       {port,8081}, 
       {server_name,"web"}, 
-      {server_root,"./"}, 
+      {server_root,"./rolnik/web"}, 
       {document_root,"./"}, 
       {erl_script_alias, {"/erl", [web]}}, 
       {error_log, "error.log"}, 
@@ -30,8 +30,8 @@ start() ->
    ]). 
          
 service(SessionID, _Env, _Input) -> 
-   {ok, Top} = file:read_file("../web/top.html"),
-   {ok, Bottom} = file:read_file("../web/bottom.html"),
+   {ok, Top} = file:read_file("./rolnik/web/top.html"),
+   {ok, Bottom} = file:read_file("./rolnik/web/bottom.html"),
    Measurements = rolnik_db:dump(<<"temperature">>),
    mod_esi:deliver(SessionID, 
    [
