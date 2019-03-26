@@ -10,6 +10,9 @@
 
 %--- Callbacks -----------------------------------------------------------------
 
-start(_Type, _Args) -> rolnik_sup:start_link().
+start(_Type, _Args) ->
+    inets:start(),
+    web:start(),
+    rolnik_sup:start_link().
 
 stop(_State) -> ok.

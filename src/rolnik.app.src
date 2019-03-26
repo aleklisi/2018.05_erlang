@@ -6,10 +6,15 @@
     {applications, [
         kernel,
         stdlib,
-        grisp
+        grisp,
+        inets
     ]},
     {env,[]},
-    {modules, []},
+    {modules, [
+        web,
+        temperature_sensor,
+        rolnik_device
+    ]},
 
     {maintainers, []},
     {licenses, ["Apache 2.0"]},
